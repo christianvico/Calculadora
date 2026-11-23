@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Java + HTML</title>
+    <style>
+        body { font-family: sans-serif; max-width: 420px; margin: 40px auto; padding: 20px; }
+        label, input, select, button { display: block; width: 100%; margin-bottom: 12px; padding: 8px; box-sizing: border-box; }
+        #rs { font-weight: bold; padding: 12px; background: #f4f4f4; border-left: 4px solid #333; }
+    </style>
+</head>
+<body>
+  
+    <h2>Calculadora (Enteros 5 digitos)</h2>
+
+    <label for="n1">Primer numero (-99999 a 99999):</label>
+    <input type="number" id="n1" min="-99999" max="99999" step="1" required>
+
+    <label for="n2">Segundo numero (-99999 a 99999):</label>
+    <input type="number" id="n2" min="-99999" max="99999" step="1" required>
+
+    <label for="op">Operacion:</label>
+    <select id="op">
+        <option value="sm">Suma (+)</option>
+        <option value="rt">Resta (-)</option>
+        <option value="mt">Multiplicacion (*)</option>
+        <option value="pt">Potencia (^)</option>
+        <option value="dv">Division (/)</option>
+    </select>
+
+    <button type="button" onclick="cl()">Calcular</button>
+    <div id="rs">Resultado: esperando datos...</div>
+
+    <script>
+   
+        var n1;
+
+      
+        var n2;
+
+ 
+        var op;
+
+     
+        var rq;
+
+    
+        var rs;
+
+        
+        function dv() {
+            op = "dv";
+            cl();
+        }
+        function cl() {
+            n1 = Number(document.getElementById("n1").value);
+            n2 = Number(document.getElementById("n2").value);
+            op = document.getElementById("op").value;
+            rs = document.getElementById("rs");
+
+            if (!Number.isInteger(n1) || !Number.isInteger(n2) || n1 < -99999 || n1 > 99999 || n2 < -99999 || n2 > 99999) {
+                rs.innerText = "Error: Introduce solo enteros entre -99999 y 99999.";
+                return;
+            }
+
+            rq = "http://localhost:8080/op?n1=" + n1 + "&n2=" + n2 + "&op=" + op;
+            fetch(rq)
+                .then(function(r) { return r.text(); })
+                .then(function(tx) { rs.innerText = "Resultado: " + tx; })
+                .catch(function() { rs.innerText = "Error: Ejecuta primero Ap.java en el puerto 8080."; });
+        }
+    </script>
+</body>
+</html>
